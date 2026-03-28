@@ -1,8 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    console.log("Website Loaded");
-
-    // MOBILE MENU
+    // Mobile Menu
     const menuToggle = document.querySelector(".menu-toggle");
     const navLinks = document.querySelector(".nav-links");
 
@@ -10,44 +8,32 @@ document.addEventListener("DOMContentLoaded", () => {
         navLinks.classList.toggle("active");
     });
 
-    // SMOOTH SCROLL
+    // Smooth Scroll
     document.querySelectorAll("a").forEach(link => {
-        link.addEventListener("click", function (e) {
-            const targetId = this.getAttribute("href");
+        link.addEventListener("click", function(e) {
+            const id = this.getAttribute("href");
 
-            if (targetId.startsWith("#")) {
+            if (id.startsWith("#")) {
                 e.preventDefault();
-                const target = document.querySelector(targetId);
-
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: "smooth"
-                    });
-                }
+                document.querySelector(id).scrollIntoView({
+                    behavior: "smooth"
+                });
             }
         });
     });
 
-    // SCROLL ANIMATION
+    // Scroll Animation (Intersection Observer)
     const sections = document.querySelectorAll(".section");
 
-    window.addEventListener("scroll", () => {
-        sections.forEach(section => {
-            const position = section.getBoundingClientRect().top;
-            const screenPosition = window.innerHeight / 1.3;
-
-            if (position < screenPosition) {
-                section.style.opacity = 1;
-                section.style.transform = "translateY(0)";
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = 1;
+                entry.target.style.transform = "translateY(0)";
             }
         });
-    });
+    }, { threshold: 0.2 });
 
-    // CARD CLICK
-    document.querySelectorAll(".project-card").forEach(card => {
-        card.addEventListener("click", () => {
-            alert("Project details coming soon 🚀");
-        });
-    });
+    sections.forEach(section => observer.observe(section));
 
 });
